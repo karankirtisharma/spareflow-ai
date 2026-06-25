@@ -1,0 +1,6 @@
+{
+  "name": "Spareflow AI",
+  "description": "Enterprise-grade multi-tenant inventory intelligence platform for automobile spare parts. Phase 1 auth, tenancy, and user management architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

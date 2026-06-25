@@ -1,0 +1,21 @@
+# Spareflow AI - Git attributes file
+# Set default behavior to automatically handle line endings.
+
+* text=auto
+
+# Explicitly declare text files that we want to always be normalized and converted to LF on checkout.
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+
+# Denote binary files (prevent them from being modified or normalized).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
