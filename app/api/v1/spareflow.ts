@@ -4,6 +4,7 @@ import {
   products, 
   warehouses, 
   customers,
+  vendors,
   inventory, 
   stockMovements, 
   purchaseOrders, 
@@ -333,6 +334,116 @@ router.post("/customers", async (req: AuthenticatedRequest, res: Response) => {
   } catch (error: any) {
     console.error("Failed to insert customer:", error);
     return sendError(res, "Failed to create customer", 500);
+  }
+});
+
+
+// --- Vendors APIs ---
+function decryptVendor(vend: any) {
+  if (!vend) return vend;
+  return {
+    ...vend,
+    email: decrypt(vend.email),
+    workPhone: decrypt(vend.workPhone),
+    mobile: decrypt(vend.mobile),
+    pan: decrypt(vend.pan)
+  };
+}
+
+router.get("/vendors", async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const tenantId = req.user!.tenantId;
+    let list = await db.select().from(vendors)
+      .where(eq(vendors.tenantId, tenantId))
+      .orderBy(desc(vendors.id));
+
+    if (list.length === 0) {
+      const defaults = [
+        { tenantId, displayName: "Bosch India Spares", email: encrypt("bosch@india-spares.com"), companyName: "Bosch India Spares", vendorType: "Business", currency: "INR- Indian Rupee", paymentTerms: "Net 30" },
+        { tenantId, displayName: "Lucas TVS Distributor", email: encrypt("orders@lucastvs-dist.co"), companyName: "Lucas TVS Distributor", vendorType: "Business", currency: "INR- Indian Rupee", paymentTerms: "Due on Receipt" },
+        { tenantId, displayName: "Brembo Premium Linings", email: encrypt("procurement@brembo.in"), companyName: "Brembo Premium Linings", vendorType: "Business", currency: "INR- Indian Rupee", paymentTerms: "Net 15" },
+        { tenantId, displayName: "TVS Girling Hydraulics", email: encrypt("tvs@girling-hydraulics.com"), companyName: "TVS Girling Hydraulics", vendorType: "Business", currency: "INR- Indian Rupee", paymentTerms: "Net 45" },
+        { tenantId, displayName: "Gabriel Suspension Ltd", email: encrypt("suspension@gabriel.in"), companyName: "Gabriel Suspension Ltd", vendorType: "Business", currency: "INR- Indian Rupee", paymentTerms: "Net 60" }
+      ];
+      await db.insert(vendors).values(defaults);
+      list = await db.select().from(vendors)
+        .where(eq(vendors.tenantId, tenantId))
+        .orderBy(desc(vendors.id));
+    }
+    const decryptedList = list.map(decryptVendor);
+    return sendSuccess(res, decryptedList, "Fetched vendors successfully");
+  } catch (error: any) {
+    console.error("Failed to query vendors:", error);
+    return sendError(res, "Failed to fetch vendors from the database", 500);
+  }
+});
+
+router.post("/vendors", async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const tenantId = req.user!.tenantId;
+    const { 
+      vendor_type, 
+      primary_contact_salutation, 
+      primary_contact_first_name, 
+      primary_contact_last_name, 
+      company_name, 
+      display_name, 
+      email, 
+      work_phone, 
+      mobile, 
+      language, 
+      pan, 
+      msme_registered,
+      currency, 
+      payment_terms, 
+      tds,
+      enable_portal,
+      billing_address,
+      shipping_address,
+      contact_persons,
+      bank_details,
+      custom_fields,
+      reporting_tags,
+      remarks
+    } = req.body;
+
+    if (!display_name) {
+      return sendError(res, "Display name is required.", 400);
+    }
+
+    const newVend = await db.insert(vendors)
+      .values({
+        tenantId,
+        vendorType: vendor_type || "Business",
+        primaryContactSalutation: primary_contact_salutation || null,
+        primaryContactFirstName: primary_contact_first_name || null,
+        primaryContactLastName: primary_contact_last_name || null,
+        companyName: company_name || null,
+        displayName: display_name,
+        email: email ? encrypt(email) : null,
+        workPhone: work_phone ? encrypt(work_phone) : null,
+        mobile: mobile ? encrypt(mobile) : null,
+        language: language || "English",
+        pan: pan ? encrypt(pan) : null,
+        msmeRegistered: !!msme_registered,
+        currency: currency || "INR- Indian Rupee",
+        paymentTerms: payment_terms || "Due on Receipt",
+        tds: tds || null,
+        enablePortal: !!enable_portal,
+        billingAddress: billing_address || null,
+        shippingAddress: shipping_address || null,
+        contactPersons: contact_persons || null,
+        bankDetails: bank_details || null,
+        customFields: custom_fields || null,
+        reportingTags: reporting_tags || null,
+        remarks: remarks || null
+      })
+      .returning();
+
+    return sendSuccess(res, decryptVendor(newVend[0]), "Vendor created successfully", 201);
+  } catch (error: any) {
+    console.error("Failed to insert vendor:", error);
+    return sendError(res, "Failed to create vendor", 500);
   }
 });
 

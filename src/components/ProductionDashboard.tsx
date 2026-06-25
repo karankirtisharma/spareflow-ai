@@ -105,10 +105,10 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
   );
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#f4f5f7] min-h-screen text-slate-800 antialiased flex flex-col font-sans">
+    <div className="flex-1 overflow-y-auto bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col font-sans">
       
       {/* 1. GREETING CARD ROW WITH FAINT BLUEPRINT PATTERN */}
-      <div className="w-full bg-white border-b border-slate-200 px-6 pt-5 pb-0 relative shrink-0">
+      <div className="w-full bg-white border-b border-slate-200/60 px-6 pt-5 pb-0 relative shrink-0">
         <BlueprintPattern />
         
         {/* Inner header content block */}
@@ -118,26 +118,26 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
           <div className="flex items-center gap-4">
             
             {/* File Icon Block */}
-            <div className="w-12 h-12 rounded-[6px] border border-slate-200 bg-white flex items-center justify-center shadow-2xs">
-              <FileText className="w-5 h-5 text-slate-400" strokeWidth={1.5} />
+            <div className="w-11 h-11 rounded-xl border border-slate-200/80 bg-white flex items-center justify-center shadow-xs">
+              <FileText className="w-4.5 h-4.5 text-slate-400" strokeWidth={1.5} />
             </div>
             
             {/* Title / Organization info */}
             <div>
-              <h2 className="text-[20px] font-semibold text-slate-900 font-sans tracking-tight leading-tight">
+              <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Hello, {currentUser?.full_name || "Paramnoor Singh"}
               </h2>
-              <p className="text-[13px] text-slate-500 font-medium mt-0.5 tracking-wide">
+              <p className="text-xs text-slate-400 font-semibold mt-0.5 tracking-wide">
                 XYZ Parts
               </p>
             </div>
           </div>
 
           {/* Right Action: Dev Playground Toggle Switch (integrated as pristine corporate tools) */}
-          <div className="flex items-center gap-2自">
+          <div className="flex items-center gap-2">
             <button 
               onClick={onSwitchToDev}
-              className="flex items-center gap-1.5 bg-[#f0fdf4] hover:bg-[#dcfce7] text-[#166534] border border-[#bbf7d0] px-3.5 py-1.5 rounded-[4px] text-[13px] font-medium transition-colors cursor-pointer shadow-2xs"
+              className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100/80 px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer shadow-xs hover:shadow-sm"
             >
               <Terminal className="w-3.5 h-3.5" />
               <span>Dev Playground API</span>
@@ -146,7 +146,7 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
         </div>
 
         {/* Tab-like navigation bar */}
-        <div className="max-w-[1400px] mx-auto mt-6 flex items-center gap-6 relative z-10 border-b border-transparent">
+        <div className="max-w-[1400px] mx-auto mt-6 flex items-center gap-6 relative z-10 border-b border-slate-100">
           {[
             { id: "dashboard", label: "Dashboard" },
             { id: "getting_started", label: "Getting Started" },
@@ -155,15 +155,15 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`pb-3 text-[14px] font-medium transition-all cursor-pointer relative ${
+              className={`pb-3 text-sm font-medium transition-all cursor-pointer relative ${
                 activeTab === tab.id 
-                  ? "text-[#2485e8] font-semibold" 
+                  ? "text-blue-600 font-semibold" 
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
               {tab.label}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#2485e8] rounded-t-full" />
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-t-full" />
               )}
             </button>
           ))}
@@ -178,9 +178,9 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
           <div className="flex-1 flex flex-col gap-6 lg:max-w-[68%]">
             
             {/* CARD 1: TOP SELLING ITEMS */}
-            <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5 relative">
-              <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                <h3 className="text-[14px] font-semibold text-slate-800 tracking-tight flex items-center gap-2">
+            <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6 relative hover:shadow-sm transition-all duration-200">
+              <div className="flex items-center justify-between mb-4 border-b border-slate-100/80 pb-3">
+                <h3 className="text-sm font-bold text-slate-800 tracking-tight flex items-center gap-2">
                   Top Selling Items
                 </h3>
                 
@@ -188,16 +188,16 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                 <div className="relative">
                   <button 
                     onClick={() => toggleDropdown("topSelling")}
-                    className="text-[12px] font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors group cursor-pointer"
+                    className="text-xs font-semibold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors group cursor-pointer"
                   >
                     <span>{dropdownSelections.topSelling}</span>
-                    <ChevronDown className="w-3.5 h-3.5 mt-0.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                   </button>
                   
                   {showPeriodDropdown === "topSelling" && (
-                    <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-[4px] shadow-sm py-1.5 z-30 text-[12px] text-slate-700">
+                    <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 z-30 text-xs text-slate-700">
                       {periods.map(p => (
-                        <button key={p} onClick={() => selectDropdownValue("topSelling", p)} className="w-full text-left px-3 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                        <button key={p} onClick={() => selectDropdownValue("topSelling", p)} className="w-full text-left px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 font-medium transition-colors">
                           {p}
                         </button>
                       ))}
@@ -207,9 +207,9 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
               </div>
 
               {/* Classic Alert Box */}
-              <div className="flex items-start gap-2.5 bg-[#f0f6ff] border border-[#d0e5ff] rounded-[4px] p-3 text-[12px] text-slate-700">
-                <Sparkles className="w-4 h-4 text-[#2485e8] mt-0.5 shrink-0" />
-                <span>You do not have any top selling items yet.</span>
+              <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-100/80 rounded-lg p-3.5 text-xs text-slate-600">
+                <Sparkles className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                <span className="font-medium">You do not have any top selling items yet.</span>
               </div>
 
               {/* Soft Skeleton Line Graphics representing product items */}
@@ -220,26 +220,26 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* CARD 2: TOP STOCKED ITEMS */}
-              <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5 flex flex-col justify-between">
+              <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6 flex flex-col justify-between hover:shadow-sm transition-all duration-200">
                 <div>
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <h3 className="text-[14px] font-semibold text-slate-800 tracking-tight">
+                  <div className="flex items-center justify-between mb-4 border-b border-slate-100/80 pb-3">
+                    <h3 className="text-sm font-bold text-slate-800 tracking-tight">
                       Top Stocked Items
                     </h3>
                     
                     <div className="relative">
                       <button 
                         onClick={() => toggleDropdown("topStocked")}
-                        className="text-[12px] font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors group cursor-pointer"
+                        className="text-xs font-semibold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors group cursor-pointer"
                       >
                         <span>As of: {dropdownSelections.topStocked}</span>
-                        <ChevronDown className="w-3.5 h-3.5 mt-0.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                       </button>
                       
                       {showPeriodDropdown === "topStocked" && (
-                        <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-[4px] shadow-sm py-1.5 z-30 text-[12px] text-slate-700">
+                        <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 z-30 text-xs text-slate-700">
                           {periods.map(p => (
-                            <button key={p} onClick={() => selectDropdownValue("topStocked", p)} className="w-full text-left px-3 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                            <button key={p} onClick={() => selectDropdownValue("topStocked", p)} className="w-full text-left px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 font-medium transition-colors">
                               {p}
                             </button>
                           ))}
@@ -252,20 +252,20 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   <div className="flex items-center gap-2 mb-4">
                     <button 
                       onClick={() => setTopStockedFilter("quantity")}
-                      className={`px-3 py-1 text-[11px] font-medium rounded-full cursor-pointer transition-colors ${
+                      className={`px-3 py-1 text-[11px] font-bold rounded-full cursor-pointer transition-all ${
                         topStockedFilter === "quantity" 
-                          ? "bg-[#2485e8] text-white" 
-                          : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300"
+                          ? "bg-blue-600 text-white shadow-xs" 
+                          : "bg-white border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700"
                       }`}
                     >
                       By Quantity
                     </button>
                     <button 
                       onClick={() => setTopStockedFilter("value")}
-                      className={`px-3 py-1 text-[11px] font-medium rounded-full cursor-pointer transition-colors ${
+                      className={`px-3 py-1 text-[11px] font-bold rounded-full cursor-pointer transition-all ${
                         topStockedFilter === "value" 
-                          ? "bg-[#2485e8] text-white" 
-                          : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300"
+                          ? "bg-blue-600 text-white shadow-xs" 
+                          : "bg-white border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700"
                       }`}
                     >
                       By Value
@@ -273,9 +273,9 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   </div>
 
                   {/* Classic Alert */}
-                  <div className="flex items-start gap-2.5 bg-[#f0f6ff] border border-[#d0e5ff] rounded-[4px] p-3 text-[12px] text-slate-700">
-                    <Sparkles className="w-4 h-4 text-[#2485e8] mt-0.5 shrink-0" />
-                    <span>No sales recorded during this period.</span>
+                  <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-100/80 rounded-lg p-3.5 text-xs text-slate-600">
+                    <Sparkles className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                    <span className="font-medium">No sales recorded during this period.</span>
                   </div>
                 </div>
 
@@ -284,8 +284,8 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   {[1, 2, 3].map((s) => (
                     <div key={s} className="flex flex-col gap-1.5 px-1 opacity-60">
                       <div className="flex justify-between items-center text-[11px] text-slate-400">
-                        <span className="w-1/3 h-2.5 bg-slate-200/80 rounded" />
-                        <span className="w-8 h-2.5 bg-slate-200/50 rounded" />
+                        <span className="w-1/3 h-2.5 bg-slate-200/80 rounded-sm" />
+                        <span className="w-8 h-2.5 bg-slate-200/50 rounded-sm" />
                       </div>
                       <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                         <div className="h-full bg-slate-200 rounded-full" style={{ width: s === 1 ? "40%" : s === 2 ? "25%" : "15%" }} />
@@ -296,26 +296,26 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
               </div>
 
               {/* CARD 3: SALES BY CHANNEL */}
-              <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5 flex flex-col justify-between">
+              <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6 flex flex-col justify-between hover:shadow-sm transition-all duration-200">
                 <div>
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <h3 className="text-[14px] font-semibold text-slate-800 tracking-tight">
+                  <div className="flex items-center justify-between mb-4 border-b border-slate-100/80 pb-3">
+                    <h3 className="text-sm font-bold text-slate-800 tracking-tight">
                       Sales By Channel
                     </h3>
                     
                     <div className="relative">
                       <button 
                         onClick={() => toggleDropdown("salesChannel")}
-                        className="text-[12px] font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors group cursor-pointer"
+                        className="text-xs font-semibold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors group cursor-pointer"
                       >
                         <span>{dropdownSelections.salesChannel}</span>
-                        <ChevronDown className="w-3.5 h-3.5 mt-0.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                       </button>
                       
                       {showPeriodDropdown === "salesChannel" && (
-                        <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-[4px] shadow-sm py-1.5 z-30 text-[12px] text-slate-700">
+                        <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 z-30 text-xs text-slate-700">
                           {periods.map(p => (
-                            <button key={p} onClick={() => selectDropdownValue("salesChannel", p)} className="w-full text-left px-3 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                            <button key={p} onClick={() => selectDropdownValue("salesChannel", p)} className="w-full text-left px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 font-medium transition-colors">
                               {p}
                             </button>
                           ))}
@@ -325,9 +325,9 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   </div>
 
                   {/* Classic Alert */}
-                  <div className="flex items-start gap-2.5 bg-[#f0f6ff] border border-[#d0e5ff] rounded-[4px] p-3 text-[12px] text-slate-700">
-                    <Sparkles className="w-4 h-4 text-[#2485e8] mt-0.5 shrink-0" />
-                    <span>No sales data found during this period.</span>
+                  <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-100/80 rounded-lg p-3.5 text-xs text-slate-600">
+                    <Sparkles className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                    <span className="font-medium">No sales data found during this period.</span>
                   </div>
                 </div>
 
@@ -341,25 +341,25 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
             </div>
 
             {/* CARD 4: SALES ORDER SUMMARY */}
-            <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5">
-              <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                <h3 className="text-[14px] font-semibold text-slate-800 tracking-tight">
+            <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6 hover:shadow-sm transition-all duration-200">
+              <div className="flex items-center justify-between mb-4 border-b border-slate-100/80 pb-3">
+                <h3 className="text-sm font-bold text-slate-800 tracking-tight">
                   Sales Order Summary
                 </h3>
                 
                 <div className="relative">
                   <button 
                     onClick={() => toggleDropdown("salesOrderSummary")}
-                    className="text-[12px] font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors group cursor-pointer"
+                    className="text-xs font-semibold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors group cursor-pointer"
                   >
                     <span>{dropdownSelections.salesOrderSummary}</span>
-                    <ChevronDown className="w-3.5 h-3.5 mt-0.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                   </button>
                   
                   {showPeriodDropdown === "salesOrderSummary" && (
-                    <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-[4px] shadow-sm py-1.5 z-30 text-[12px] text-slate-700">
+                    <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 z-30 text-xs text-slate-700">
                       {periods.map(p => (
-                        <button key={p} onClick={() => selectDropdownValue("salesOrderSummary", p)} className="w-full text-left px-3 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                        <button key={p} onClick={() => selectDropdownValue("salesOrderSummary", p)} className="w-full text-left px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 font-medium transition-colors">
                           {p}
                         </button>
                       ))}
@@ -372,20 +372,20 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
               <div className="flex items-center gap-2 mb-6">
                 <button 
                   onClick={() => setSalesSummaryFilter("quantity")}
-                  className={`px-3 py-1 text-[11px] font-medium rounded-full cursor-pointer transition-colors ${
+                  className={`px-3 py-1 text-[11px] font-bold rounded-full cursor-pointer transition-all ${
                     salesSummaryFilter === "quantity" 
-                      ? "bg-[#2485e8] text-white" 
-                      : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300"
+                      ? "bg-blue-600 text-white shadow-xs" 
+                      : "bg-white border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700"
                   }`}
                 >
                   By Quantity
                 </button>
                 <button 
                   onClick={() => setSalesSummaryFilter("value")}
-                  className={`px-3 py-1 text-[11px] font-medium rounded-full cursor-pointer transition-colors ${
+                  className={`px-3 py-1 text-[11px] font-bold rounded-full cursor-pointer transition-all ${
                     salesSummaryFilter === "value" 
-                      ? "bg-[#2485e8] text-white" 
-                      : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300"
+                      ? "bg-blue-600 text-white shadow-xs" 
+                      : "bg-white border border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700"
                   }`}
                 >
                   By Value
@@ -399,7 +399,7 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                 {[0, 1, 2, 3, 4].map((gridline) => (
                   <div 
                     key={gridline} 
-                    className="absolute left-0 right-0 border-t border-dashed border-slate-200/50" 
+                    className="absolute left-0 right-0 border-t border-dashed border-slate-200/40" 
                     style={{ bottom: `${(gridline + 1) * 20}%` }}
                   />
                 ))}
@@ -416,7 +416,7 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
 
                 {/* Absolut center banner overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-[13px] text-slate-400 font-medium">
+                  <p className="text-xs text-slate-400 font-semibold">
                     No sales orders created during this period.
                   </p>
                 </div>
@@ -434,26 +434,26 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
               
               {/* CARD 5: TOP VENDORS */}
-              <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5 flex flex-col justify-between">
+              <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6 flex flex-col justify-between hover:shadow-sm transition-all duration-200">
                 <div>
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <h3 className="text-[14px] font-semibold text-slate-800 tracking-tight">
+                  <div className="flex items-center justify-between mb-4 border-b border-slate-100/80 pb-3">
+                    <h3 className="text-sm font-bold text-slate-800 tracking-tight">
                       Top Vendors
                     </h3>
                     
                     <div className="relative">
                       <button 
                         onClick={() => toggleDropdown("topVendors")}
-                        className="text-[12px] font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors group cursor-pointer"
+                        className="text-xs font-semibold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors group cursor-pointer"
                       >
                         <span>{dropdownSelections.topVendors}</span>
-                        <ChevronDown className="w-3.5 h-3.5 mt-0.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                       </button>
                       
                       {showPeriodDropdown === "topVendors" && (
-                        <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-[4px] shadow-sm py-1.5 z-30 text-[12px] text-slate-700">
+                        <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 z-30 text-xs text-slate-700">
                           {periods.map(p => (
-                            <button key={p} onClick={() => selectDropdownValue("topVendors", p)} className="w-full text-left px-3 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                            <button key={p} onClick={() => selectDropdownValue("topVendors", p)} className="w-full text-left px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 font-medium transition-colors">
                               {p}
                             </button>
                           ))}
@@ -463,41 +463,41 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   </div>
 
                   {/* Alert */}
-                  <div className="flex items-start gap-2.5 bg-[#f0f6ff] border border-[#d0e5ff] rounded-[4px] p-3 text-[12px] text-slate-700">
-                    <Sparkles className="w-4 h-4 text-[#2485e8] mt-0.5 shrink-0" />
-                    <span>No vendor activity found for this period.</span>
+                  <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-100/80 rounded-lg p-3.5 text-xs text-slate-600">
+                    <Sparkles className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                    <span className="font-medium">No vendor activity found for this period.</span>
                   </div>
                 </div>
 
                 {/* Soft visual decoration */}
                 <div className="h-10 mt-6 pb-2 opacity-30 flex items-end justify-between px-4 gap-2">
                   {[1, 2, 3, 4, 5, 6].map(i => (
-                    <div key={i} className="flex-1 bg-slate-200" style={{ height: `${i * 12}%` }} />
+                    <div key={i} className="flex-1 bg-slate-250 rounded-xs" style={{ height: `${i * 12}%` }} />
                   ))}
                 </div>
               </div>
 
               {/* CARD 6: RECEIVE HISTORY */}
-              <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5 flex flex-col justify-between">
+              <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6 flex flex-col justify-between hover:shadow-sm transition-all duration-200">
                 <div>
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <h3 className="text-[14px] font-semibold text-slate-800 tracking-tight">
+                  <div className="flex items-center justify-between mb-4 border-b border-slate-100/80 pb-3">
+                    <h3 className="text-sm font-bold text-slate-800 tracking-tight">
                       Receive History
                     </h3>
                     
                     <div className="relative">
                       <button 
                         onClick={() => toggleDropdown("receiveHistory")}
-                        className="text-[12px] font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors group cursor-pointer"
+                        className="text-xs font-semibold text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors group cursor-pointer"
                       >
                         <span>{dropdownSelections.receiveHistory}</span>
-                        <ChevronDown className="w-3.5 h-3.5 mt-0.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                       </button>
                       
                       {showPeriodDropdown === "receiveHistory" && (
-                        <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-[4px] shadow-sm py-1.5 z-30 text-[12px] text-slate-700">
+                        <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-lg shadow-lg py-1.5 z-30 text-xs text-slate-700">
                           {periods.map(p => (
-                            <button key={p} onClick={() => selectDropdownValue("receiveHistory", p)} className="w-full text-left px-3 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                            <button key={p} onClick={() => selectDropdownValue("receiveHistory", p)} className="w-full text-left px-3.5 py-2 hover:bg-slate-50 hover:text-blue-600 font-medium transition-colors">
                               {p}
                             </button>
                           ))}
@@ -507,16 +507,16 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   </div>
 
                   {/* Alert */}
-                  <div className="flex items-start gap-2.5 bg-[#f0f6ff] border border-[#d0e5ff] rounded-[4px] p-3 text-[12px] text-slate-700">
-                    <Sparkles className="w-4 h-4 text-[#2485e8] mt-0.5 shrink-0" />
-                    <span>No purchase receives found for this period.</span>
+                  <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-100/80 rounded-lg p-3.5 text-xs text-slate-600">
+                    <Sparkles className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                    <span className="font-medium">No purchase receives found for this period.</span>
                   </div>
                 </div>
 
                 {/* Soft visual decoration */}
                 <div className="h-10 mt-6 pb-2 opacity-30 flex items-end justify-between px-4 gap-2">
                   {[6, 5, 4, 3, 2, 1].map(i => (
-                    <div key={i} className="flex-1 bg-slate-200" style={{ height: `${i * 12}%` }} />
+                    <div key={i} className="flex-1 bg-slate-250 rounded-xs" style={{ height: `${i * 12}%` }} />
                   ))}
                 </div>
               </div>
@@ -529,15 +529,15 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
           <div className="w-full lg:w-[32%] shrink-0 flex flex-col gap-6">
             
             {/* COLLAPSIBLE SIDEBAR CONTAINER */}
-            <div className="bg-white border border-slate-200 rounded-[6px] shadow-2xs p-5">
+            <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs p-6">
               
               {/* Toggle switcher pill body */}
-              <div className="flex bg-[#eef2f6] rounded-[4px] p-1 mb-6">
+              <div className="flex bg-slate-100 rounded-lg p-1 mb-6">
                 <button 
                   onClick={() => setActiveSidebarTab("pending")}
-                  className={`flex-1 text-center py-1.5 rounded-[4px] text-[12px] font-semibold transition-all cursor-pointer ${
+                  className={`flex-1 text-center py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                     activeSidebarTab === "pending" 
-                      ? "bg-white text-slate-800 shadow-3xs" 
+                      ? "bg-white text-slate-800 shadow-sm" 
                       : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
@@ -545,9 +545,9 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                 </button>
                 <button 
                   onClick={() => setActiveSidebarTab("recent")}
-                  className={`flex-1 text-center py-1.5 rounded-[4px] text-[12px] font-semibold transition-all cursor-pointer ${
+                  className={`flex-1 text-center py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                     activeSidebarTab === "recent" 
-                      ? "bg-white text-slate-800 shadow-3xs" 
+                      ? "bg-white text-slate-800 shadow-sm" 
                       : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
@@ -561,12 +561,12 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   
                   {/* SALES BLOCK */}
                   <div>
-                    <h4 className="text-[12px] font-bold text-slate-600 tracking-wider flex items-center gap-2 mb-3.5">
-                      <ShoppingCart className="w-4 h-4 text-[#f59e0b]" strokeWidth={2.5} />
+                    <h4 className="text-[11px] font-bold text-slate-400 tracking-wider flex items-center gap-2 mb-3">
+                      <ShoppingCart className="w-3.5 h-3.5 text-amber-500" strokeWidth={2.5} />
                       SALES
                     </h4>
                     
-                    <div className="divide-y divide-slate-100/70 border-t border-b border-slate-100">
+                    <div className="divide-y divide-slate-100/70 border-t border-b border-slate-100/80">
                       {[
                         { label: "To Be Packed", val: 0 },
                         { label: "To Be Shipped", val: 0 },
@@ -574,11 +574,11 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                         { label: "To Be Invoiced", val: 0 }
                       ].map((item) => (
                         <div key={item.label} className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 px-1 transition-colors">
-                          <div className="flex items-center gap-2 text-[13px] text-slate-600 font-sans">
-                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-400 transition-colors" />
-                            <span>{item.label}</span>
+                          <div className="flex items-center gap-2 text-xs text-slate-600 font-sans">
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                            <span className="font-medium">{item.label}</span>
                           </div>
-                          <span className="text-[13px] text-slate-800 font-semibold">{item.val}</span>
+                          <span className="text-xs text-slate-900 font-bold">{item.val}</span>
                         </div>
                       ))}
                     </div>
@@ -586,22 +586,22 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
 
                   {/* PURCHASES BLOCK */}
                   <div>
-                    <h4 className="text-[12px] font-bold text-slate-600 tracking-wider flex items-center gap-2 mb-3.5">
-                      <ShoppingBag className="w-4 h-4 text-[#f59e0b]" strokeWidth={2.5} />
+                    <h4 className="text-[11px] font-bold text-slate-400 tracking-wider flex items-center gap-2 mb-3">
+                      <ShoppingBag className="w-3.5 h-3.5 text-amber-500" strokeWidth={2.5} />
                       PURCHASES
                     </h4>
                     
-                    <div className="divide-y divide-slate-100/70 border-t border-b border-slate-100">
+                    <div className="divide-y divide-slate-100/70 border-t border-b border-slate-100/80">
                       {[
                         { label: "To Be Received", val: 0 },
                         { label: "Receive In Progress", val: 0 }
                       ].map((item) => (
                         <div key={item.label} className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 px-1 transition-colors">
-                          <div className="flex items-center gap-2 text-[13px] text-slate-600 font-sans">
-                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-400 transition-colors" />
-                            <span>{item.label}</span>
+                          <div className="flex items-center gap-2 text-xs text-slate-600 font-sans">
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                            <span className="font-medium">{item.label}</span>
                           </div>
-                          <span className="text-[13px] text-slate-800 font-semibold">{item.val}</span>
+                          <span className="text-xs text-slate-900 font-bold">{item.val}</span>
                         </div>
                       ))}
                     </div>
@@ -609,21 +609,21 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
 
                   {/* INVENTORY BLOCK */}
                   <div>
-                    <h4 className="text-[12px] font-bold text-slate-600 tracking-wider flex items-center gap-2 mb-3.5">
-                      <Package className="w-4 h-4 text-[#f59e0b]" strokeWidth={2.5} />
+                    <h4 className="text-[11px] font-bold text-slate-400 tracking-wider flex items-center gap-2 mb-3">
+                      <Package className="w-3.5 h-3.5 text-amber-500" strokeWidth={2.5} />
                       INVENTORY
                     </h4>
                     
-                    <div className="divide-y divide-slate-100/70 border-t border-b border-slate-100">
+                    <div className="divide-y divide-slate-100/70 border-t border-b border-slate-100/80">
                       {[
                         { label: "Below Reorder Level", val: 0 }
                       ].map((item) => (
                         <div key={item.label} className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 px-1 transition-colors">
-                          <div className="flex items-center gap-2 text-[13px] text-slate-600 font-sans">
-                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-400 transition-colors" />
-                            <span>{item.label}</span>
+                          <div className="flex items-center gap-2 text-xs text-slate-600 font-sans">
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                            <span className="font-medium">{item.label}</span>
                           </div>
-                          <span className="text-[13px] text-slate-800 font-semibold">{item.val}</span>
+                          <span className="text-xs text-slate-900 font-bold">{item.val}</span>
                         </div>
                       ))}
                     </div>
@@ -636,7 +636,7 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
                   <span className="p-3 bg-slate-50 rounded-full border border-slate-100 mb-3">
                     <Calendar className="w-6 h-6 text-slate-300" />
                   </span>
-                  <p className="text-[12px] text-slate-400 font-medium">
+                  <p className="text-xs text-slate-400 font-semibold">
                     No recent activities recorded today.
                   </p>
                 </div>
@@ -645,16 +645,16 @@ export function ProductionDashboard({ onSwitchToDev, currentUser }: ProductionDa
             </div>
 
             {/* DECORATIVE EXTRA HELPFUL TIP CARD */}
-            <div className="bg-[#eff6ff] border border-blue-100 rounded-[6px] p-5 flex items-start gap-4 shadow-3xs relative overflow-hidden">
-              <div className="absolute right-0 bottom-0 opacity-[0.04]">
+            <div className="bg-blue-50/50 border border-blue-100/80 rounded-xl p-6 flex items-start gap-4 shadow-2xs relative overflow-hidden">
+              <div className="absolute right-0 bottom-0 opacity-[0.03]">
                 <Layers className="w-24 h-24 text-blue-800" />
               </div>
-              <div className="p-2 bg-blue-100 text-blue-600 rounded-[4px] shrink-0">
-                <HelpCircle className="w-5 h-5" />
+              <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+                <HelpCircle className="w-4.5 h-4.5" />
               </div>
               <div>
-                <h4 className="text-[13px] font-semibold text-blue-900 leading-tight">Need assistance?</h4>
-                <p className="text-[11.5px] text-blue-700/90 mt-1.5 leading-relaxed font-sans">
+                <h4 className="text-xs font-bold text-blue-950 leading-tight">Need assistance?</h4>
+                <p className="text-[11.5px] text-blue-850 mt-1.5 leading-relaxed font-sans font-medium">
                   Configure real items, vendors, and clients via the sidebar tabs, then connect them smoothly! Or query endpoints in the Dev Playground interface.
                 </p>
               </div>

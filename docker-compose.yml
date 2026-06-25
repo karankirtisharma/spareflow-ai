@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Relational Database Service
+  db:
+    image: postgres:16-alpine
+    container_name: spareflow-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_database_secure_password
+      POSTGRES_DB: spareflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d spareflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Spareflow AI Core Monolith Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spareflow-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - JWT_SECRET=spareflow_jwt_secret_super_secure_key_2026
+      - ENCRYPTION_SECRET=spareflow_encryption_master_key_default_32bytes_value_2026
+      - APP_URL=http://localhost:3000
+      - SQL_HOST=db
+      - SQL_USER=postgres
+      - SQL_PASSWORD=your_database_secure_password
+      - SQL_DB_NAME=spareflow
+      - SQL_POOL_MAX=20
+      - GEMINI_API_KEY=
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+    driver: local

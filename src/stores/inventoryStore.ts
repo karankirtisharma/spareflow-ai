@@ -24,6 +24,27 @@ export interface Vendor {
   id: string;
   name: string;
   email: string;
+  vendor_type?: string;
+  salutation?: string;
+  first_name?: string;
+  last_name?: string;
+  company_name?: string;
+  work_phone?: string;
+  mobile?: string;
+  language?: string;
+  pan?: string;
+  msme_registered?: boolean;
+  currency?: string;
+  payment_terms?: string;
+  tds?: string;
+  enable_portal?: boolean;
+  billing_address?: string;
+  shipping_address?: string;
+  contact_persons?: string;
+  bank_details?: string;
+  custom_fields?: string;
+  reporting_tags?: string;
+  remarks?: string;
 }
 
 export interface Customer {
@@ -206,6 +227,7 @@ interface InventoryState {
   fetchMoveOrders: () => Promise<void>;
   fetchPutaways: () => Promise<void>;
   fetchCustomers: () => Promise<void>;
+  fetchVendors: () => Promise<void>;
   fetchInvoices: () => Promise<void>;
   fetchInitialData: () => Promise<void>;
   
@@ -228,6 +250,31 @@ interface InventoryState {
     currency?: string;
     payment_terms?: string;
     enable_portal?: boolean;
+  }) => Promise<void>;
+  addVendor: (vendor: {
+    vendor_type?: string;
+    primary_contact_salutation?: string;
+    primary_contact_first_name?: string;
+    primary_contact_last_name?: string;
+    company_name?: string;
+    display_name: string;
+    email?: string;
+    work_phone?: string;
+    mobile?: string;
+    language?: string;
+    pan?: string;
+    msme_registered?: boolean;
+    currency?: string;
+    payment_terms?: string;
+    tds?: string;
+    enable_portal?: boolean;
+    billing_address?: string;
+    shipping_address?: string;
+    contact_persons?: string;
+    bank_details?: string;
+    custom_fields?: string;
+    reporting_tags?: string;
+    remarks?: string;
   }) => Promise<void>;
   
   addPurchaseOrder: (po: Omit<PurchaseOrder, 'id' | 'items'> & { items: Omit<PurchaseOrderItem, 'id' | 'qtyReceived'>[] }) => Promise<void>;
@@ -529,6 +576,46 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     }
   },
 
+  fetchVendors: async () => {
+    try {
+      const res = await fetch('/api/v1/spareflow/vendors');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          const formatted = data.map((v: any) => ({
+            id: String(v.id),
+            name: v.displayName,
+            email: v.email || '',
+            vendor_type: v.vendorType || 'Business',
+            salutation: v.primaryContactSalutation || '',
+            first_name: v.primaryContactFirstName || '',
+            last_name: v.primaryContactLastName || '',
+            company_name: v.companyName || '',
+            work_phone: v.workPhone || '',
+            mobile: v.mobile || '',
+            language: v.language || 'English',
+            pan: v.pan || '',
+            msme_registered: !!v.msmeRegistered,
+            currency: v.currency || 'INR- Indian Rupee',
+            payment_terms: v.paymentTerms || 'Due on Receipt',
+            tds: v.tds || '',
+            enable_portal: !!v.enablePortal,
+            billing_address: v.billingAddress || '',
+            shipping_address: v.shippingAddress || '',
+            contact_persons: v.contactPersons || '',
+            bank_details: v.bankDetails || '',
+            custom_fields: v.customFields || '',
+            reporting_tags: v.reportingTags || '',
+            remarks: v.remarks || ''
+          }));
+          set({ vendors: formatted });
+        }
+      }
+    } catch (e) {
+      console.warn("Could not fetch vendors:", e);
+    }
+  },
+
   fetchInvoices: async () => {
     try {
       const res = await fetch('/api/v1/spareflow/invoices');
@@ -582,6 +669,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
       get().fetchMoveOrders(),
       get().fetchPutaways(),
       get().fetchCustomers(),
+      get().fetchVendors(),
       get().fetchInvoices()
     ]);
     set({ isLoading: false });
@@ -632,6 +720,21 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
       });
       if (res.ok) {
         await get().fetchCustomers();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  addVendor: async (vendor) => {
+    try {
+      const res = await fetch('/api/v1/spareflow/vendors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vendor),
+      });
+      if (res.ok) {
+        await get().fetchVendors();
       }
     } catch (e) {
       console.error(e);

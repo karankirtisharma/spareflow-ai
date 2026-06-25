@@ -104,6 +104,24 @@ docker build -t spareflow-ai .
 docker run -d -p 3000:3000 --env-file .env spareflow-ai
 ```
 
+### Run Multi-Container Environments with Docker Compose
+We supply a pre-configured `docker-compose.yml` file to spin up both the Spareflow core monolith and a local PostgreSQL instance:
+```bash
+docker compose up -d --build
+```
+This sets up:
+1. `db`: A standard PostgreSQL 16 container with persistent volumes mapped on a safe bridge.
+2. `app`: The built application container running in production mode, configured to connect directly to the db after health checks pass.
+
+To verify service logs:
+```bash
+docker compose logs -f app
+```
+To shutdown and clean up containers:
+```bash
+docker compose down -v
+```
+
 ---
 
 ## 5. Cloud Platform Deployments

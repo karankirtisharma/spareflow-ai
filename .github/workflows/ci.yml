@@ -1,0 +1,33 @@
+name: Spareflow AI - CI Pipeline
+
+on:
+  push:
+    branches: [ main, master, "feature/**", "bugfix/**" ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Code Quality & Type Safety Audit
+        run: npm run lint
+
+      - name: Run Cryptographic & Integration Tests
+        run: npm run test
+
+      - name: Perform Complete System Production Build
+        run: npm run build

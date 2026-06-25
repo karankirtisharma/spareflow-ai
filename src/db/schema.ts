@@ -83,6 +83,35 @@ export const customers = pgTable("customers", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const vendors = pgTable("vendors", {
+  id: serial("id").primaryKey(),
+  tenantId: text("tenant_id").references(() => tenants.id, { onDelete: "cascade" }).notNull(),
+  vendorType: text("vendor_type").default("Business"),
+  primaryContactSalutation: text("primary_contact_salutation"),
+  primaryContactFirstName: text("primary_contact_first_name"),
+  primaryContactLastName: text("primary_contact_last_name"),
+  companyName: text("company_name"),
+  displayName: text("display_name").notNull(),
+  email: text("email"),
+  workPhone: text("work_phone"),
+  mobile: text("mobile"),
+  language: text("language").default("English"),
+  pan: text("pan"),
+  msmeRegistered: boolean("msme_registered").default(false),
+  currency: text("currency").default("INR- Indian Rupee"),
+  paymentTerms: text("payment_terms").default("Due on Receipt"),
+  tds: text("tds"),
+  enablePortal: boolean("enable_portal").default(false),
+  billingAddress: text("billing_address"),
+  shippingAddress: text("shipping_address"),
+  contactPersons: text("contact_persons"),
+  bankDetails: text("bank_details"),
+  customFields: text("custom_fields"),
+  reportingTags: text("reporting_tags"),
+  remarks: text("remarks"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Detailed multi-location inventory tracker (qty of product P in warehouse W)
 export const inventory = pgTable("inventory", {
   id: serial("id").primaryKey(),

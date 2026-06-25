@@ -23,6 +23,7 @@ import { useInventoryStore } from "./stores/inventoryStore.js";
 
 // New Components (we will create these)
 import { CustomersList } from "./components/spareflow/CustomersList.jsx";
+import { VendorsList } from "./components/spareflow/VendorsList.jsx";
 import { SalesOrdersList } from "./components/spareflow/SalesOrdersList.jsx";
 import { InvoicesList } from "./components/spareflow/InvoicesList.jsx";
 import { InventoryAdjustmentsList } from "./components/spareflow/InventoryAdjustmentsList.jsx";
@@ -184,21 +185,21 @@ export default function App() {
     : [];
 
   return (
-    <div className="h-screen w-screen flex flex-col font-sans antialiased text-slate-800 bg-[#f4f5f7] overflow-hidden select-none">
+    <div className="h-screen w-screen flex flex-col font-sans antialiased text-slate-800 bg-slate-50 overflow-hidden select-none">
       {/* TOP NAVBAR - SPAREFLOW INVENTORY */}
-      <div className="bg-[#1e2235] text-slate-100 flex items-center justify-between px-4 py-2 border-b border-[#2b3046] shrink-0 relative z-50">
+      <div className="bg-white text-slate-800 flex items-center justify-between px-6 py-2.5 border-b border-slate-200 shrink-0 relative z-50 shadow-xs">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveMenu("home")}>
-            <Boxes className="w-5 h-5 text-blue-400 animate-pulse" />
-            <h1 className="font-semibold text-lg tracking-tight hover:text-blue-300 transition-colors">Spareflow</h1>
-            <span className="text-[10px] bg-blue-900/60 text-blue-300 border border-blue-800 px-1.5 py-0.2 rounded font-mono font-bold uppercase mt-0.5">INV</span>
+            <Boxes className="w-5 h-5 text-blue-600" />
+            <h1 className="font-bold text-base tracking-tight text-slate-900">Spareflow</h1>
+            <span className="text-[9px] bg-blue-50 text-blue-600 border border-blue-100 px-2 py-0.5 rounded-full font-mono font-bold uppercase mt-0.5">INV</span>
           </div>
         </div>
         
         {/* Interactive Global Search bar */}
-        <div className="flex-1 flex max-w-2xl px-6 relative">
-          <div className="flex items-center flex-1 bg-[#282d46] border border-[#39405f] rounded overflow-hidden transition-all focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
-            <div className="px-3 py-1.5 flex items-center gap-2 border-r border-[#39405f] text-[#8e98bc] cursor-pointer hover:bg-[#343a57]">
+        <div className="flex-1 flex max-w-xl px-6 relative">
+          <div className="flex items-center flex-1 bg-slate-50 border border-slate-200/80 rounded-lg overflow-hidden transition-all focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+            <div className="px-3 py-1.5 flex items-center gap-1.5 text-slate-400 cursor-pointer hover:bg-slate-100/60 transition-colors">
               <Search className="w-3.5 h-3.5" />
               <ChevronDown className="w-3 h-3" />
             </div>
@@ -210,13 +211,13 @@ export default function App() {
                 setShowSearchDropdown(true);
               }}
               onFocus={() => setShowSearchDropdown(true)}
-              placeholder="Quick search products (e.g. brake pads, SKU)..." 
-              className="flex-1 bg-transparent px-3 py-1.5 text-sm text-white placeholder-[#8e98bc] outline-hidden w-full"
+              placeholder="Search products, brands, models..." 
+              className="flex-1 bg-transparent px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 outline-none w-full"
             />
             {searchQuery && (
               <button 
                 onClick={() => { setSearchQuery(""); setShowSearchDropdown(false); }}
-                className="px-2.5 text-slate-400 hover:text-white text-xs font-bold"
+                className="px-2.5 text-slate-400 hover:text-slate-600 text-xs font-bold"
               >
                 ✕
               </button>
@@ -269,15 +270,15 @@ export default function App() {
 
         {/* Top Navbar Action Buttons */}
         <div className="flex items-center gap-4 text-sm font-medium">
-          <div className="hidden md:flex items-center gap-1.5 text-[11px] text-slate-300 mr-2">
-            Role: <span className="font-bold text-blue-400 bg-blue-900/40 px-2 py-0.5 rounded border border-blue-800">{activeUserRole}</span>
+          <div className="hidden md:flex items-center gap-1.5 text-[11px] text-slate-500 mr-1">
+            Role: <span className="font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">{activeUserRole}</span>
           </div>
           
           {/* 1. INTERACTIVE PLUS DROP-DOWN (QUICK SHORTCUTS) */}
           <div className="relative">
             <button 
               onClick={() => setShowPlusDropdown(!showPlusDropdown)}
-              className="bg-blue-600 hover:bg-blue-700 w-7 h-7 rounded flex items-center justify-center transition-colors shadow-sm"
+              className="bg-blue-600 hover:bg-blue-700 w-7 h-7 rounded flex items-center justify-center transition-colors shadow-sm cursor-pointer"
               title="Quick Add Menu"
             >
               <Plus className={`w-4 h-4 text-white transition-transform ${showPlusDropdown ? 'rotate-45' : 'rotate-0'}`} />
@@ -314,22 +315,26 @@ export default function App() {
             )}
           </div>
           
-          <div className="flex items-center gap-3">
-            <UserPlus 
+          <div className="flex items-center gap-1.5">
+            <button 
               onClick={() => setActiveMenu("customers")}
-              className="w-4.5 h-4.5 text-[#8e98bc] hover:text-white cursor-pointer transition-colors" 
+              className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
               title="Add New Customer"
-            />
+            >
+              <UserPlus className="w-4.5 h-4.5" />
+            </button>
             
             {/* 2. INTERACTIVE NOTIFICATIONS BELL */}
             <div className="relative">
-              <Bell 
+              <button 
                 onClick={() => setShowBellDropdown(!showBellDropdown)}
-                className={`w-4.5 h-4.5 cursor-pointer transition-colors ${showBellDropdown ? 'text-white' : 'text-[#8e98bc] hover:text-white'}`} 
-              />
+                className={`p-1.5 rounded-lg cursor-pointer transition-colors ${showBellDropdown ? 'bg-slate-100 text-slate-800' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'}`}
+                title="System Notifications"
+              >
+                <Bell className="w-4.5 h-4.5" />
+              </button>
               {notifications.filter(n => !n.read).length > 0 && (
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full text-[7.5px] text-white flex items-center justify-center font-bold animate-bounce shadow-sm">
-                  {notifications.filter(n => !n.read).length}
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white flex items-center justify-center shadow-sm">
                 </span>
               )}
 
@@ -375,20 +380,22 @@ export default function App() {
               )}
             </div>
 
-            <Settings 
+            <button 
               onClick={() => {
                 setPrevMenu(activeMenu);
                 setActiveMenu("settings");
               }}
-              className={`w-4.5 h-4.5 hover:text-white cursor-pointer transition-colors ${activeMenu === "settings" ? "text-white animate-spin-slow" : "text-[#8e98bc]"}`} 
+              className={`p-1.5 rounded-lg cursor-pointer transition-colors ${activeMenu === "settings" ? "bg-slate-100 text-slate-800" : "text-slate-400 hover:text-slate-700 hover:bg-slate-50"}`}
               title="System Configuration Settings"
-            />
+            >
+              <Settings className={`w-4.5 h-4.5 ${activeMenu === "settings" ? "animate-spin-slow" : ""}`} />
+            </button>
 
             {/* 3. INTERACTIVE PROFILE & SIMULATE ROLE DROPDOWN */}
-            <div className="relative">
+            <div className="relative ml-1">
               <div 
                 onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                className="w-7 h-7 rounded-full bg-pink-650 hover:bg-pink-700 flex items-center justify-center text-white font-bold cursor-pointer text-[13px] shadow-3xs hover:scale-105 transition-transform"
+                className="w-7 h-7 rounded-full bg-slate-900 hover:bg-slate-800 flex items-center justify-center text-white font-bold cursor-pointer text-[12px] shadow-xs transition-all"
                 title={`Logged in as ${currentUser?.full_name || "Pradeep Kumar"} (${activeUserRole})`}
               >
                 {currentUser?.full_name ? currentUser.full_name.charAt(0).toUpperCase() : "P"}
@@ -461,11 +468,13 @@ export default function App() {
 
             {/* 4. INTERACTIVE APPS GRID DROPDOWN */}
             <div className="relative">
-              <LayoutGrid 
+              <button 
                 onClick={() => setShowAppsGridDropdown(!showAppsGridDropdown)}
-                className={`w-4.5 h-4.5 cursor-pointer transition-colors ${showAppsGridDropdown ? 'text-white' : 'text-[#8e98bc] hover:text-white'}`} 
+                className={`p-1.5 rounded-lg cursor-pointer transition-colors ${showAppsGridDropdown ? 'bg-slate-100 text-slate-800' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-50'}`}
                 title="Spareflow Apps Switcher"
-              />
+              >
+                <LayoutGrid className="w-4.5 h-4.5" />
+              </button>
 
               {showAppsGridDropdown && (
                 <>
@@ -515,13 +524,13 @@ export default function App() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* LEFT SIDEBAR - ZOHO / SPAREFLOW STYLE */}
-        <nav className={`bg-[#f8f9fa] border-r border-[#e5e7eb] flex flex-col shrink-0 transition-all duration-300 ${isSidebarCollapsed ? 'w-[64px]' : 'w-[15rem]'}`}>
+        <nav className={`bg-white border-r border-slate-200/80 flex flex-col shrink-0 transition-all duration-300 ${isSidebarCollapsed ? 'w-[64px]' : 'w-[15rem]'}`}>
           {/* Org Switcher at the very top of the Left Sidebar */}
-          <div className="p-3 border-b border-[#e5e7eb] relative">
+          <div className="p-3 border-b border-slate-150 relative">
             {isSidebarCollapsed ? (
               <div 
                 onClick={() => setShowOrgPopover(!showOrgPopover)}
-                className="w-10 h-10 mx-auto rounded-lg bg-white border border-slate-250 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition-colors shadow-3xs text-[#2485e8]"
+                className="w-10 h-10 mx-auto rounded-lg bg-white border border-slate-200 flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all shadow-xs text-blue-600"
                 title={`Org: ${activeOrgName} (Click to Switch)`}
               >
                 <Building2 className="w-5 h-5" />
@@ -529,11 +538,11 @@ export default function App() {
             ) : (
               <div 
                 onClick={() => setShowOrgPopover(!showOrgPopover)}
-                className="flex items-center justify-between gap-1.5 cursor-pointer hover:bg-slate-200/50 transition-colors text-[13px] text-slate-800 bg-white px-3 py-2 rounded-lg border border-slate-250 shadow-3xs"
+                className="flex items-center justify-between gap-1.5 cursor-pointer hover:bg-slate-50 transition-colors text-[13px] text-slate-800 bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-xs"
                 title="Click to switch organization / shop profile"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <Building2 className="w-4 h-4 text-[#2485e8] shrink-0" />
+                  <Building2 className="w-4 h-4 text-blue-600 shrink-0" />
                   <span className="font-bold truncate text-slate-700">{activeOrgName}</span>
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -548,7 +557,7 @@ export default function App() {
                 {/* Popover Card */}
                 <div className="absolute left-3 right-3 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-slate-800">
                   {/* Title / Header */}
-                  <div className="bg-[#f8f9fa] border-b border-slate-150 p-3">
+                  <div className="bg-slate-50 border-b border-slate-150 p-3">
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">CHOOSE YOUR WORKSPACE</span>
                     <h4 className="font-bold text-[11px] text-slate-800">Switch active entity</h4>
                   </div>
@@ -594,14 +603,14 @@ export default function App() {
                   </div>
 
                   {/* Footer link */}
-                  <div className="bg-[#f8f9fa] border-t border-slate-150 p-2.5 flex justify-between items-center text-[11px]">
+                  <div className="bg-slate-50 border-t border-slate-150 p-2.5 flex justify-between items-center text-[11px]">
                     <button 
                       onClick={() => {
                         setPrevMenu(activeMenu);
                         setActiveMenu("settings");
                         setShowOrgPopover(false);
                       }}
-                      className="text-[#2485e8] font-bold hover:underline cursor-pointer"
+                      className="text-blue-600 font-bold hover:underline cursor-pointer"
                     >
                       Manage Orgs
                     </button>
@@ -612,92 +621,94 @@ export default function App() {
             )}
           </div>
 
-          <div className="py-3 flex-1 flex flex-col gap-0.5 overflow-y-auto">
+          <div className="py-4 flex-1 flex flex-col gap-1.5 overflow-y-auto">
             
             {/* Home */}
-            <button
-              onClick={() => setActiveMenu("home")}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] transition-all ${
-                activeMenu === "home" ? "bg-blue-50 text-blue-600 font-medium border-l-[3px] border-blue-600 pl-[13px]" : "text-[#4b5563] hover:bg-slate-100 border-l-[3px] border-transparent font-normal pl-4"
-              }`}
-              title="Home Dashboard"
-            >
-              <Home className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-              {!isSidebarCollapsed && <span>Home</span>}
-            </button>
+            <div className="px-3">
+              <button
+                onClick={() => setActiveMenu("home")}
+                className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg transition-all ${
+                  activeMenu === "home" ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50 font-normal"
+                }`}
+                title="Home Dashboard"
+              >
+                <Home className={`w-[18px] h-[18px] shrink-0 ${activeMenu === "home" ? "text-blue-600" : "text-slate-400"}`} strokeWidth={1.5} />
+                {!isSidebarCollapsed && <span>Home</span>}
+              </button>
+            </div>
 
             {/* Items Section */}
             <div>
               {isSidebarCollapsed ? (
-                <button 
-                  onClick={() => setActiveMenu("items")}
-                  className={`w-full flex items-center justify-center py-2.5 text-[13px] transition-colors ${
-                    activeMenu === "items" ? "bg-blue-50 text-blue-600 font-semibold" : "text-[#4b5563] hover:bg-slate-100"
-                  }`}
-                  title="Items List"
-                >
-                  <ShoppingBag className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-                </button>
+                <div className="px-3">
+                  <button 
+                    onClick={() => setActiveMenu("items")}
+                    className={`w-full flex items-center justify-center h-9 w-9 rounded-lg text-[13px] transition-colors ${
+                      activeMenu === "items" ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                    title="Items List"
+                  >
+                    <ShoppingBag className={`w-[18px] h-[18px] shrink-0 ${activeMenu === "items" ? "text-blue-600" : "text-slate-400"}`} strokeWidth={1.5} />
+                  </button>
+                </div>
               ) : (
-                <>
+                <div className="px-3">
                   <button 
                     onClick={() => toggleSection("items")}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] ${
-                      activeMenu === "items" ? "font-semibold text-slate-800" : "text-[#4b5563]"
-                    } hover:bg-slate-100 font-normal border-l-[3px] border-transparent pl-4 transition-colors group`}
+                    className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg text-slate-600 hover:bg-slate-50 font-normal transition-colors group`}
                   >
                     <div className="relative flex items-center w-4 h-4 mr-1">
                       <span className={`absolute -left-3 transition-transform ${openSections.items ? "rotate-90" : "rotate-0"} text-slate-400`}>
-                        <ChevronRight className="w-3 h-3" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </span>
-                      <ShoppingBag className="w-[18px] h-[18px] absolute text-slate-500" strokeWidth={1.5} />
+                      <ShoppingBag className="w-[18px] h-[18px] absolute text-slate-400 group-hover:text-slate-600" strokeWidth={1.5} />
                     </div>
                     Items
                   </button>
                   {openSections.items && (
-                    <div className="flex flex-col mt-0.5 py-1">
-                      <div className="flex flex-col relative">
-                        <div className="flex items-center justify-between text-left mx-2 py-1 pr-2 rounded-sm transition-colors bg-[#eff6ff] text-[#2485e8] font-semibold border-l-[3px] border-blue-600">
-                          <button onClick={() => setActiveMenu("items")} className="text-left pl-10 text-[13px] flex-1">
-                            Items
-                          </button>
-                          <Plus className="w-3.5 h-3.5 cursor-pointer text-blue-500 hover:text-blue-700" />
-                        </div>
+                    <div className="flex flex-col mt-0.5 gap-0.5 pl-6">
+                      <div className={`flex items-center justify-between rounded-lg px-3 py-1.5 transition-all ${activeMenu === "items" ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"}`}>
+                        <button onClick={() => setActiveMenu("items")} className="text-left text-[12.5px] flex-1 font-medium">
+                          Items
+                        </button>
+                        <Plus className="w-3.5 h-3.5 cursor-pointer text-blue-500 hover:text-blue-700" />
                       </div>
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
 
             {/* Inventory Section */}
             <div>
               {isSidebarCollapsed ? (
-                <button 
-                  onClick={() => setActiveMenu("inventory_adjustments")}
-                  className={`w-full flex items-center justify-center py-2.5 text-[13px] transition-colors ${
-                    ["inventory_adjustments", "packages", "shipments", "move_orders", "putaways"].includes(activeMenu) ? "bg-blue-50 text-blue-600 font-semibold" : "text-[#4b5563] hover:bg-slate-100"
-                  }`}
-                  title="Inventory Adjustments / Control"
-                >
-                  <Package className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-                </button>
+                <div className="px-3">
+                  <button 
+                    onClick={() => setActiveMenu("inventory_adjustments")}
+                    className={`w-full flex items-center justify-center h-9 w-9 rounded-lg text-[13px] transition-colors ${
+                      ["inventory_adjustments", "packages", "shipments", "move_orders", "putaways"].includes(activeMenu) ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                    title="Inventory Adjustments / Control"
+                  >
+                    <Package className={`w-[18px] h-[18px] shrink-0 ${["inventory_adjustments", "packages", "shipments", "move_orders", "putaways"].includes(activeMenu) ? "text-blue-600" : "text-slate-400"}`} strokeWidth={1.5} />
+                  </button>
+                </div>
               ) : (
-                <>
+                <div className="px-3">
                   <button 
                     onClick={() => toggleSection("inventory")}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] text-[#4b5563] hover:bg-slate-100 font-normal border-l-[3px] border-transparent pl-4 transition-colors`}
+                    className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg text-slate-600 hover:bg-slate-50 font-normal transition-colors`}
                   >
                     <div className="relative flex items-center w-4 h-4 mr-1">
                       <span className={`absolute -left-3 transition-transform ${openSections.inventory ? "rotate-90" : "rotate-0"} text-slate-400`}>
-                        <ChevronRight className="w-3 h-3" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </span>
-                      <Package className="w-[18px] h-[18px] absolute text-slate-500" strokeWidth={1.5} />
+                      <Package className="w-[18px] h-[18px] absolute text-slate-400" strokeWidth={1.5} />
                     </div>
                     Inventory
                   </button>
                   {openSections.inventory && (
-                    <div className="flex flex-col mt-0.5 py-1 pl-10 space-y-1">
+                    <div className="flex flex-col mt-0.5 pl-6 gap-0.5">
                       {[
                         { label: "Inventory Adjustments", id: "inventory_adjustments" },
                         { label: "Packages", id: "packages" },
@@ -708,45 +719,47 @@ export default function App() {
                         <button 
                           key={sub.id} 
                           onClick={() => setActiveMenu(sub.id)} 
-                          className={`text-left py-1 text-[13px] block ${activeMenu === sub.id ? "text-blue-600 font-semibold" : "text-[#4b5563] hover:text-slate-900"}`}
+                          className={`text-left px-3 py-1.5 text-[12.5px] rounded-lg block transition-all ${activeMenu === sub.id ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"}`}
                         >
                           {sub.label}
                         </button>
                       ))}
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
 
             {/* Sales Section */}
             <div>
               {isSidebarCollapsed ? (
-                <button 
-                  onClick={() => setActiveMenu("sales_orders")}
-                  className={`w-full flex items-center justify-center py-2.5 text-[13px] transition-colors ${
-                    ["customers", "sales_orders", "invoices"].includes(activeMenu) ? "bg-blue-50 text-blue-600 font-semibold" : "text-[#4b5563] hover:bg-slate-100"
-                  }`}
-                  title="Sales Management"
-                >
-                  <ShoppingCart className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-                </button>
+                <div className="px-3">
+                  <button 
+                    onClick={() => setActiveMenu("sales_orders")}
+                    className={`w-full flex items-center justify-center h-9 w-9 rounded-lg text-[13px] transition-colors ${
+                      ["customers", "sales_orders", "invoices"].includes(activeMenu) ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                    title="Sales Management"
+                  >
+                    <ShoppingCart className={`w-[18px] h-[18px] shrink-0 ${["customers", "sales_orders", "invoices"].includes(activeMenu) ? "text-blue-600" : "text-slate-400"}`} strokeWidth={1.5} />
+                  </button>
+                </div>
               ) : (
-                <>
+                <div className="px-3">
                   <button 
                     onClick={() => toggleSection("sales")}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] text-[#4b5563] hover:bg-slate-100 font-normal border-l-[3px] border-transparent pl-4 transition-colors`}
+                    className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg text-slate-600 hover:bg-slate-50 font-normal transition-colors`}
                   >
                     <div className="relative flex items-center w-4 h-4 mr-1">
                       <span className={`absolute -left-3 transition-transform ${openSections.sales ? "rotate-90" : "rotate-0"} text-slate-400`}>
-                        <ChevronRight className="w-3 h-3" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </span>
-                      <ShoppingCart className="w-[18px] h-[18px] absolute text-slate-500" strokeWidth={1.5} />
+                      <ShoppingCart className="w-[18px] h-[18px] absolute text-slate-400" strokeWidth={1.5} />
                     </div>
                     Sales
                   </button>
                   {openSections.sales && (
-                    <div className="flex flex-col mt-0.5 py-1 pl-10 space-y-1">
+                    <div className="flex flex-col mt-0.5 pl-6 gap-0.5">
                       {[
                         { label: "Customers", id: "customers" },
                         { label: "Sales Orders", id: "sales_orders" },
@@ -755,43 +768,47 @@ export default function App() {
                         <button 
                           key={sub.id} 
                           onClick={() => setActiveMenu(sub.id)} 
-                          className={`text-left py-1 text-[13px] block ${activeMenu === sub.id ? "text-blue-600 font-semibold" : "text-[#4b5563] hover:text-slate-900"}`}
+                          className={`text-left px-3 py-1.5 text-[12.5px] rounded-lg block transition-all ${activeMenu === sub.id ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"}`}
                         >
                           {sub.label}
                         </button>
                       ))}
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
 
             {/* Purchases Section */}
             <div>
               {isSidebarCollapsed ? (
-                <button 
-                  onClick={() => { alert("Purchases flow is locked in standard simulation. Switch to Premium standard module."); }}
-                  className="w-full flex items-center justify-center py-2.5 text-[13px] text-[#4b5563] hover:bg-slate-100 transition-colors"
-                  title="Purchases Management"
-                >
-                  <Inbox className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-                </button>
+                <div className="px-3">
+                  <button 
+                    onClick={() => { setActiveMenu("vendors"); }}
+                    className={`w-full flex items-center justify-center h-9 w-9 rounded-lg text-[13px] transition-colors ${
+                      ["vendors", "expenses", "purchase_orders"].includes(activeMenu) ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                    title="Purchases Management"
+                  >
+                    <Inbox className={`w-[18px] h-[18px] shrink-0 ${["vendors", "expenses", "purchase_orders"].includes(activeMenu) ? "text-blue-600" : "text-slate-400"}`} strokeWidth={1.5} />
+                  </button>
+                </div>
               ) : (
-                <>
+                <div className="px-3">
                   <button 
                     onClick={() => toggleSection("purchases")}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] text-[#4b5563] hover:bg-slate-100 font-normal border-l-[3px] border-transparent pl-4 transition-colors`}
+                    className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg text-slate-600 hover:bg-slate-50 font-normal transition-colors`}
                   >
                     <div className="relative flex items-center w-4 h-4 mr-1">
                       <span className={`absolute -left-3 transition-transform ${openSections.purchases ? "rotate-90" : "rotate-0"} text-slate-400`}>
-                        <ChevronRight className="w-3 h-3" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </span>
-                      <Inbox className="w-[18px] h-[18px] absolute text-slate-500" strokeWidth={1.5} />
+                      <Inbox className="w-[18px] h-[18px] absolute text-slate-400" strokeWidth={1.5} />
                     </div>
                     Purchases
                   </button>
                   {openSections.purchases && (
-                    <div className="flex flex-col mt-0.5 py-1 pl-10 space-y-1">
+                    <div className="flex flex-col mt-0.5 pl-6 gap-0.5">
                       {[
                         { label: "Vendors", id: "vendors" },
                         { label: "Expenses", id: "expenses" },
@@ -800,39 +817,46 @@ export default function App() {
                         <button 
                           key={sub.id} 
                           onClick={() => setActiveMenu(sub.id)} 
-                          className={`text-left py-1 text-[13px] block ${activeMenu === sub.id ? "text-blue-600 font-semibold" : "text-[#4b5563] hover:text-slate-900"}`}
+                          className={`text-left px-3 py-1.5 text-[12.5px] rounded-lg block transition-all ${activeMenu === sub.id ? "bg-blue-50 text-blue-600 font-semibold" : "text-slate-600 hover:bg-slate-50"}`}
                         >
                           {sub.label}
                         </button>
                       ))}
                     </div>
                   )}
-                </>
+                </div>
               )}
             </div>
 
-            <button 
-              onClick={() => { alert("Exporting reports is a pro function."); }}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] text-[#4b5563] hover:bg-slate-100 font-normal border-l-[3px] border-transparent pl-4 mt-1 ${isSidebarCollapsed ? 'justify-center pl-0' : ''}`}
-              title="Reports / Business Intelligence"
-            >
-              <FileSpreadsheet className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-              {!isSidebarCollapsed && <span>Reports</span>}
-            </button>
+            <div className="px-3">
+              <button 
+                onClick={() => { alert("Exporting reports is a pro function."); }}
+                className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg text-slate-600 hover:bg-slate-50 transition-colors ${isSidebarCollapsed ? 'justify-center' : ''}`}
+                title="Reports / Business Intelligence"
+              >
+                <FileSpreadsheet className="w-[18px] h-[18px] shrink-0 text-slate-400" strokeWidth={1.5} />
+                {!isSidebarCollapsed && <span>Reports</span>}
+              </button>
+            </div>
             
-            <button 
-              onClick={() => { alert("Documents folder contains standard invoices CSVs."); }}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] text-[#4b5563] hover:bg-slate-100 font-normal border-l-[3px] border-transparent pl-4 ${isSidebarCollapsed ? 'justify-center pl-0' : ''}`}
-              title="Documents Store"
-            >
-              <Folder className="w-[18px] h-[18px] shrink-0 text-slate-500" strokeWidth={1.5} />
-              {!isSidebarCollapsed && <span>Documents</span>}
-            </button>
+            <div className="px-3">
+              <button 
+                onClick={() => { alert("Documents folder contains standard invoices CSVs."); }}
+                className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] rounded-lg text-slate-600 hover:bg-slate-50 transition-colors ${isSidebarCollapsed ? 'justify-center' : ''}`}
+                title="Documents Store"
+              >
+                <Folder className="w-[18px] h-[18px] shrink-0 text-slate-400" strokeWidth={1.5} />
+                {!isSidebarCollapsed && <span>Documents</span>}
+              </button>
+            </div>
 
             {/* Configure Features Button */}
             {!isSidebarCollapsed && (
-              <div className="px-4 py-3 mt-2">
-                <button onClick={() => { setActiveMenu("settings"); }} className="w-full flex items-center justify-center gap-1 py-1.5 px-3 bg-[#e0f2fe] hover:bg-blue-100 text-[#0284c7] font-medium text-[12px] rounded-sm transition-colors border border-transparent">
+              <div className="px-3 py-2">
+                <button 
+                  onClick={() => { setActiveMenu("settings"); }} 
+                  className="w-full flex items-center justify-center gap-1 py-2 px-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold text-[11.5px] rounded-lg transition-colors"
+                >
                   Configure Features <ChevronRight className="w-3 h-3" />
                 </button>
               </div>
@@ -840,21 +864,20 @@ export default function App() {
 
             {/* Live Onboarding Card widget */}
             {!isSidebarCollapsed && (
-              <div className="mx-3 mt-2 mb-3 p-3 bg-white border border-slate-200 rounded-md relative shadow-xs flex flex-col items-center">
-                <div className="w-16 h-10 bg-slate-100 rounded-sm mb-2 relative flex items-center justify-center border border-slate-200">
-                  <div className="w-11 h-7 bg-[#312e81] rounded-sm flex items-center justify-center">
+              <div className="mx-3 mt-auto p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl relative flex flex-col items-center">
+                <div className="w-16 h-10 bg-white rounded-lg mb-2 relative flex items-center justify-center border border-slate-200/80 shadow-xs">
+                  <div className="w-11 h-7 bg-slate-900 rounded-md flex items-center justify-center">
                     <span className="text-white text-[7px] font-bold">▶</span>
                   </div>
-                  <div className="absolute bottom-0 w-16 h-1 bg-slate-400 rounded-full"></div>
                 </div>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium bg-blue-50 text-blue-600 mb-1 leading-none uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold bg-blue-50 text-blue-600 mb-1 leading-none uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-                  LIVE GUIDED ONBOARDING
+                  LIVE ONBOARDING
                 </span>
                 <p className="text-[10px] text-slate-500 text-center leading-normal mb-2">
-                  Join us for a free onboarding walkthrough to get started with Spareflow Inventory.
+                  Get a free walkthrough to start using Spareflow Inventory.
                 </p>
-                <button onClick={() => alert("Launching live onboarding tour demo")} className="text-[11px] font-bold text-[#2485e8] hover:underline flex items-center">
+                <button onClick={() => alert("Launching live onboarding tour demo")} className="text-[10.5px] font-bold text-blue-600 hover:underline flex items-center">
                   Register Now <ChevronRight className="w-3 h-3" />
                 </button>
               </div>
@@ -904,6 +927,8 @@ export default function App() {
              <ItemsList />
           ) : activeMenu === "customers" ? (
              <CustomersList />
+          ) : activeMenu === "vendors" ? (
+             <VendorsList />
           ) : activeMenu === "sales_orders" ? (
              <SalesOrdersList />
           ) : activeMenu === "invoices" ? (
