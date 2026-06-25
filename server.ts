@@ -1,6 +1,9 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
+import cors from "cors";
+import helmet from "helmet";
+import { rateLimit } from "express-rate-limit";
 import { CONFIG } from "./app/core/config.js";
 
 // Import API Routers
@@ -12,6 +15,29 @@ import productsRouter from "./app/api/v1/products.js";
 
 async function startServer() {
   const app = express();
+
+  // Security Hardening Middlewares
+  app.use(cors({
+    origin: true,
+    credentials: true,
+  }));
+
+  app.use(helmet({
+    contentSecurityPolicy: CONFIG.NODE_ENV === "production" ? undefined : false,
+    crossOriginEmbedderPolicy: CONFIG.NODE_ENV === "production" ? undefined : false,
+  }));
+
+  // Rate limiting to prevent abuse
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 200, // Limit each IP to 200 requests per window
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { error: "Too many requests from this IP, please try again after 15 minutes." }
+  });
+
+  app.use("/api/v1/auth", apiLimiter);
+  app.use("/api/auth", apiLimiter);
 
   // Standard Middlewares
   app.use(express.json());

@@ -11,7 +11,7 @@ export const createPool = () => {
     database: process.env.SQL_DB_NAME,
     connectionTimeoutMillis: 15000,
     idleTimeoutMillis: 10000, // close idle connections after 10s to avoid using terminated sockets
-    max: 10,                  // limit pool size to conserve connections
+    max: process.env.SQL_POOL_MAX ? parseInt(process.env.SQL_POOL_MAX, 10) : 15,                  // limit pool size to conserve connections, configurable under load
     keepAlive: true,          // enable TCP keep-alive to maintain active connection tunnels
   });
 };

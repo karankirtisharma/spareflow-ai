@@ -1,8 +1,8 @@
 import crypto from "crypto";
 import { CONFIG } from "./config.js";
 
-// Deriving a standard 32-byte (256-bit) encryption key from the JWT_SECRET
-const MASTER_KEY = crypto.createHash("sha256").update(CONFIG.JWT_SECRET || "spareflow-system-super-secret-master-key-value").digest();
+// Deriving a standard 32-byte (256-bit) encryption key from the ENCRYPTION_SECRET
+const MASTER_KEY = crypto.createHash("sha256").update(CONFIG.ENCRYPTION_SECRET || "spareflow-system-super-secret-encryption-master-key-value").digest();
 const ALGORITHM = "aes-256-cbc";
 
 /**
